@@ -3,10 +3,6 @@ numpy
 seaborn
 scikit-learn
 streamlit
-<<<<<<< HEAD
--e .
-=======
 joblib
 PyYAML
 altair==4.2.2
->>>>>>> 9a146ec (Pin altair version for Streamlit compatibility)
