@@ -1,48 +1,32 @@
 💎 Diamond Price Prediction
 
-An end-to-end Machine Learning project that predicts the **price of a diamond** based on its physical and categorical attributes.  
-The project follows an **industry-style ML pipeline architecture** and uses **Streamlit** for interactive prediction.
+An end-to-end **Machine Learning regression project** that predicts the price of a diamond based on its physical and categorical characteristics.  
+The project follows **industry-style ML architecture**, with a modular pipeline, logging, exception handling, and multiple UI options for inference.
 
 ---
 
-## 🚀 Project Overview
+## 🚀 Project Highlights
 
-The goal of this project is to build a robust ML system that:
-
-- Ingests raw diamond data
-- Performs data preprocessing and feature engineering
-- Trains a regression model
-- Saves trained artifacts (model & preprocessor)
-- Provides predictions through a user-friendly **Streamlit web app**
-
-The ML logic is completely **decoupled from the frontend**, making it easy to switch between Flask, Streamlit, or FastAPI.
-
----
-
-## 🧠 Features Used
-
-### Numerical Features
-- `carat`
-- `depth`
-- `table`
-- `x` (length in mm)
-- `y` (width in mm)
-- `z` (depth in mm)
-
-### Categorical Features
-- `cut`
-- `color`
-- `clarity`
+- End-to-end ML pipeline (ingestion → transformation → training → prediction)
+- Modular and reusable codebase
+- Custom logging and exception handling
+- Multiple app interfaces:
+  - **Streamlit** (`app.py`)
+  - **Gradio** (`app_gradio.py`)
+- Production-ready folder structure
+- Easily extendable to FastAPI / Docker / CI-CD
 
 ---
 
-## 🏗️ Project Structure
+## 📂 Project Structure
 
 ```
 
 DiamondPricePred/
 │
-├── app.py                     # Streamlit application
+├── app.py                      # Streamlit application
+├── app_gradio.py               # Gradio application
+│
 ├── src/
 │   ├── components/
 │   │   ├── data_ingestion.py
@@ -53,13 +37,15 @@ DiamondPricePred/
 │   │   ├── training_pipeline.py
 │   │   └── prediction_pipeline.py
 │   │
-│   ├── logger.py               # Logging configuration
-│   └── exception.py            # Custom exception handling
+│   ├── utils.py
+│   ├── logger.py
+│   └── exception.py
 │
-├── artifacts/                  # Saved models & preprocessors
+├── artifacts/                  # Saved models, preprocessors, datasets
 ├── logs/                       # Log files
 ├── notebooks/                  # EDA & experimentation notebooks
 ├── config/                     # Configuration files (optional)
+│
 ├── requirements.txt
 ├── setup.py
 └── README.md
@@ -68,77 +54,96 @@ DiamondPricePred/
 
 ---
 
-## ⚙️ ML Pipeline Flow
+## 📊 Dataset Description
+
+The dataset contains information about diamonds with the following features:
+
+### Numerical Features
+- `carat` – weight of the diamond
+- `depth` – total depth percentage
+- `table` – width of the top of the diamond
+- `x` – length (mm)
+- `y` – width (mm)
+- `z` – depth (mm)
+
+### Categorical Features
+- `cut` – quality of the cut
+- `color` – diamond color grading
+- `clarity` – clarity measurement
+
+### Target
+- `price` – price of the diamond
+
+---
+
+## ⚙️ Machine Learning Pipeline
 
 1. **Data Ingestion**
-   - Reads raw CSV data
-   - Saves raw, train, and test datasets
+   - Reads raw dataset
+   - Splits into train and test sets
+   - Saves artifacts
 
 2. **Data Transformation**
    - Numerical scaling
    - Categorical encoding
-   - Saves preprocessing pipeline
+   - Preprocessor saved for reuse
 
 3. **Model Training**
-   - Trains regression model
-   - Evaluates performance
-   - Saves trained model
+   - Regression model training
+   - Model evaluation
+   - Best model saved
 
 4. **Prediction Pipeline**
-   - Loads preprocessor & model
-   - Validates input schema
-   - Returns price prediction
+   - Loads trained model & preprocessor
+   - Ensures schema consistency
+   - Generates predictions
 
 ---
 
-## 🖥️ Streamlit Application
+## 🖥️ Running the Applications
 
-The Streamlit app allows users to:
-
-- Enter diamond features interactively
-- Get real-time price predictions
-- Run locally without backend server setup
-
-### ▶️ Run the App
+### 🔹 1. Streamlit App
 
 ```bash
 streamlit run app.py
 ````
 
----
-
-## 🧪 How to Train the Model
-
-Run the training pipeline:
-
-```bash
-python src/pipeline/training_pipeline.py
-```
-
-This will generate:
-
-* `artifacts/train.csv`
-* `artifacts/test.csv`
-* `artifacts/preprocessor.pkl`
-* `artifacts/model.pkl`
+* Interactive UI
+* Ideal for demos and portfolios
 
 ---
 
-## 📦 Installation
-
-### 1️⃣ Clone the repository
+### 🔹 2. Gradio App
 
 ```bash
-git clone https://github.com/your-username/DiamondPricePred.git
-cd DiamondPricePred
+python app_gradio.py
 ```
 
-### 2️⃣ Create virtual environment
+* Lightweight interface
+* Easy sharing and rapid testing
+
+---
+
+## 📦 Installation & Setup
+
+### 1️⃣ Create virtual environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate      # Linux/Mac
-venv\Scripts\activate         # Windows
+```
+
+### 2️⃣ Activate environment
+
+**Windows**
+
+```bash
+venv\Scripts\activate
+```
+
+**Linux / Mac**
+
+```bash
+source venv/bin/activate
 ```
 
 ### 3️⃣ Install dependencies
@@ -149,28 +154,62 @@ pip install -r requirements.txt
 
 ---
 
+## 🧪 Train the Model
+
+Run the training pipeline:
+
+```bash
+python src/pipeline/training_pipeline.py
+```
+
+This will generate:
+
+* Processed datasets
+* Trained model
+* Preprocessor artifacts
+
+---
+
 ## 🛠️ Tech Stack
 
 * Python
 * Pandas, NumPy
-* Scikit-learn
+* Scikit-Learn
 * Streamlit
+* Gradio
 * Logging & Custom Exceptions
 
 ---
 
-## 🎯 Key Highlights
+## 🧠 Design Philosophy
 
-* Modular, production-style ML architecture
-* Frontend independent ML pipeline
-* Robust exception handling & logging
-* Easy to extend to MLOps (Docker, CI/CD, FastAPI)
+* Frontend (UI) is **decoupled** from ML logic
+* Same prediction pipeline works with:
+
+  * Streamlit
+  * Gradio
+  * Flask / FastAPI (future)
+* Clean separation of concerns enables easy scaling
 
 ---
 
+## 📈 Future Improvements
 
-## 🙌 Author
+* Dockerization
+* CI/CD pipeline
+* FastAPI backend
+* Cloud deployment (AWS / Azure / GCP)
+* Model monitoring & retraining
+
+---
+
+## 👤 Author
 
 **Ashutosh Pandey**
+Machine Learning & Data Science Enthusiast
 
-Feel free to ⭐ the repository if you find this project useful!
+---
+
+## ⭐ If you like this project
+
+Give it a ⭐ on GitHub — it motivates continuous improvement!
